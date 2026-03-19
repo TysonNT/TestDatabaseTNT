@@ -1,14 +1,20 @@
-from setuptools import setup, find_packages
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
 
-setup(
-    name="matproplib",
-    version="0.1.0",
-    author="Tyson",
-    description="Aerospace material property database for rocket engine design",
-    package_dir={"": "src"},
-    packages=find_packages(where="src"),
-    install_requires=[
-        "numpy>=1.20.0",
-    ],
-    python_requires=">=3.8",
-)
+[project]
+name = "matprotlib" # OR "test-database-3"
+version = "0.0.1"
+authors = [
+  { name="Tyson Tran", email="tyson26tran@gmail.com },
+]
+description = "A clean and simple material property database."
+readme = "README.md"
+requires-python = ">=3.7"
+dependencies = [
+    "numpy", # This tells pip to automatically install numpy if the user doesn't have it!
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
