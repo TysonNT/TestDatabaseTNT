@@ -1,7 +1,7 @@
 import numpy as np
 from .core import Material, MaterialRegistry
   # Initialize the single database registry
-db = MaterialRegistry()
+_default_registry = MaterialRegistry()
   # --- Aluminum 6061 ---
 #Source:https://trc.nist.gov/cryogenics/materials/6061%20Aluminum/6061_T6Aluminum_rev.htm
 #Source: https://gtvault.sharepoint.com/:b:/r/sites/AE-YellowJacketSpaceProgram/Shared%20Documents/0_YJSP%20Files%20(Sharepoint)/02_Engine_Dev/1_Engine%20Design/Engine%20Dev%20Code/Material%20Database/MMPDS%201.pdf?csf=1&web=1&e=IYBleV
@@ -38,7 +38,7 @@ al_6061_t6.add_prop("melting_point", 855.0, "K")
 
 al_6061_t6.add_meta("heat_treatable", True)
 al_6061_t6.add_meta("machinability_index", 50) 
-db.add_material(al_6061_t6)
+_default_registry.add_material(al_6061_t6)
 
 # --- Inconel 625 ---
 # https://www.specialmetals.com/documents/technical-bulletins/inconel/inconel-alloy-625.pdf
@@ -152,4 +152,24 @@ inc625.add_fatigue({
                 np.array([2.616e8,2.514e8,2.415e8,2.328e8,2.237e8,2.146e8,2.072e8,2.027e8,1.895e8,1.829e8,1.785e8,1.950e8]) ] 
  }, condition="Solution Treated")
 
-db.add_material(inc625)
+_default_registry.add_material(inc_625)
+
+# --- Module-Level API ---
+
+def get_material(name: str, condition: str = None) -> Material:
+    """Fetches a material from the default database."""
+    base_material = _default_registry.get_material(name)
+    
+    if not base_material:
+        raise ValueError(f"Material '{name}' not found in database.")
+        
+    if condition:
+        import copy
+        user_material = copy.copy(base_material)
+        user_material.default_condition = condition
+        return user_material
+        
+    return base_material
+
+def list_materials() -> list:
+    return _default_registry.list_materials()
