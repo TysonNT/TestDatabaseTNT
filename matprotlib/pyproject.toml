@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "matprotlib"
 version = "0.0.1"
 authors = [
-  { name="Your Name", email="your.email@example.com" },
+  { name="Tyson Tran", email="tyson26tran@gmail.com" },
 ]
 description = "A clean and simple material property database."
 readme = "README.md"
