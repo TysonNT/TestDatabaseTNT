@@ -62,18 +62,15 @@ class FatigueProfile:
 
 # --- 3. The Material Class ---
 class Material:
-    def __init__(self, name: str, category: str = "General", default_condition: str = "Standard"):
+    def __init__(self, name: str, category: str = "General", default_condition: str = "annealed"):
         self.name = name
         self.category = category
         self.default_condition = default_condition
         
         # Structure: { prop_name: { condition_name: Prop_Object } }
         self.properties: Dict[str, Dict[str, Prop]] = {}
-        
-        # Structure: { condition_name: FatigueProfile }
         self.fatigue: Dict[str, FatigueProfile] = {}
-        
-        self.metadata: Dict[str, Any] = {} 
+        self.metadata: Dict[str, Any] = {}
 
     def add_prop(self, key: str, data, units: str = "", condition: str = None):
         """Add a standard table/value property for a specific condition."""
@@ -127,6 +124,29 @@ class Material:
 
     def __repr__(self):
         return f"Material(Name='{self.name}', Default='{self.default_condition}', Props={len(self.properties)})"
+    def get(self, prop_name: str, T: float = 298.0, condition: str = None) -> float:
+        """Fetch a property, optionally at a specific temperature or condition."""
+        target_cond = condition if condition else self.default_condition
+        
+        if prop_name not in self.properties:
+            raise AttributeError(f"Material '{self.name}' has no property '{prop_name}'")
+        if target_cond not in self.properties[prop_name]:
+            raise AttributeError(f"'{prop_name}' found, but missing data for condition '{target_cond}'.")
+
+        return self.properties[prop_name][target_cond].get(T)
+
+    def __getattr__(self, item: str):
+        """
+        The magic method that allows `alloy.density`.
+        It automatically fetches the property at standard Room Temp (298K) 
+        using the default condition!
+        """
+        # If the user asks for something that happens to be in our properties dict
+        if item in self.properties:
+            return self.get(item, T=298.0) # Defaults to Room Temp
+        
+        # If it's not a property, raise a standard Python error
+        raise AttributeError(f"'{self.__class__.__name__}' object has no attribute '{item}'")
 
 # --- 4. The Database Registry ---
 class MaterialRegistry:
