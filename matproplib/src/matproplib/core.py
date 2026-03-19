@@ -137,10 +137,24 @@ class MaterialRegistry:
         # Store by a unique key, typically Name + Condition
         key = f"{material.name}_{material.default_condition}".replace(" ", "_").lower()
         self._db[key] = material
-        print(f"Registered: {material.name} ({material.default_condition})")
-
+        
     def get_material(self, name_key: str) -> Material:
         return self._db.get(name_key.lower())
 
     def list_materials(self):
         return list(self._db.keys())
+
+# --- 5. Module-Level API (The "mp" Interface) ---
+_default_registry = MaterialRegistry()
+
+def add_material(material: Material):
+    """Module-level wrapper to add a material to the default registry."""
+    _default_registry.add_material(material)
+
+def get_material(name_key: str) -> Material:
+    """Module-level wrapper to fetch a material."""
+    return _default_registry.get_material(name_key)
+
+def list_materials() -> List[str]:
+    """Module-level wrapper to list available materials."""
+    return _default_registry.list_materials()
