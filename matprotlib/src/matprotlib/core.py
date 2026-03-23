@@ -135,17 +135,23 @@ class Material:
 
         return self.properties[prop_name][target_cond].get(T)
 
-    def __getattr__(self, item: str):
+   def __getattr__(self, item: str):
         """
         The magic method that allows `alloy.density`.
         It automatically fetches the property at standard Room Temp (298K) 
         using the default condition!
         """
-        # If the user asks for something that happens to be in our properties dict
-        if item in self.properties:
+        # 1. Prevent infinite recursion from Python's internal background checks
+        if item.startswith('__'):
+            raise AttributeError(f"'{self.__class__.__name__}' has no attribute '{item}'")
+        
+        # 2. Safely grab the properties dictionary without triggering getattr again
+        props = self.__dict__.get('properties', {})
+        
+        # 3. Check if the user's requested item is a valid property
+        if item in props:
             return self.get(item, T=298.0) # Defaults to Room Temp
         
-        # If it's not a property, raise a standard Python error
         raise AttributeError(f"'{self.__class__.__name__}' object has no attribute '{item}'")
 
 # --- 4. The Database Registry ---
