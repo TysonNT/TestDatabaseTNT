@@ -154,7 +154,7 @@ inc625.add_fatigue({
                 np.array([2.616e8,2.514e8,2.415e8,2.328e8,2.237e8,2.146e8,2.072e8,2.027e8,1.895e8,1.829e8,1.785e8,1.950e8]) ] 
  }, condition="Solution Treated")
 
-_default_registry.add_material(inc_625)
+_default_registry.add_material(inc625)
 
 # --- Module-Level API ---
 
