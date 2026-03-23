@@ -154,12 +154,14 @@ class MaterialRegistry:
         self._db: Dict[str, Material] = {}
 
     def add_material(self, material: Material):
-        # Store by a unique key, typically Name + Condition
-        key = f"{material.name}_{material.default_condition}".replace(" ", "_").lower()
+        # CHANGE: Just use the name, replace spaces with underscores, and make it lowercase
+        key = material.name.replace(" ", "_").lower()
         self._db[key] = material
-        
+
     def get_material(self, name_key: str) -> Material:
-        return self._db.get(name_key.lower())
+        # CHANGE: Format the user's search query the exact same way to guarantee a match
+        key = name_key.replace(" ", "_").lower()
+        return self._db.get(key)
 
     def list_materials(self):
         return list(self._db.keys())
