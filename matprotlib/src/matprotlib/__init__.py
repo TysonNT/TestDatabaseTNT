@@ -1,3 +1,5 @@
-from .core import Material, MaterialRegistry, Prop
-from .database import db
-__version__ = "1.0.1"
+import numpy as np
+from .core import Material, MaterialRegistry
+
+# Initialize the single database registry (NO 'db' variable)
+_default_registry = MaterialRegistry()
