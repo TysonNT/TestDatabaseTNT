@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "matprotlib"
-version = "0.0.5"  # <-- Change this from 0.0.1
+version = "0.0.6"  # <-- Change this from 0.0.1
 authors = [
   { name="Tyson Tran", email="tyson26tran@gmail.com" },
 ]
