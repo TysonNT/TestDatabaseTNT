@@ -1,4 +1,6 @@
 import numpy as np
+import os
+import subprocess
 from .core import Material, MaterialRegistry
 
 # Initialize the single database registry (NO 'db' variable)
@@ -175,3 +177,20 @@ def get_material(name: str, condition: str = None) -> Material:
 
 def list_materials() -> list:
     return _default_registry.list_materials()
+
+
+def launch_dashboard():
+    """Launches the interactive web dashboard."""
+    # 1. Find the exact folder where this __init__.py file lives on the user's PC
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    
+    # 2. Point to the dashboard.py file sitting right next to it
+    dashboard_path = os.path.join(current_dir, "dashboard.py")
+    
+    print("🚀 Launching MatProtLib Dashboard in your browser...")
+    
+    # 3. Tell the terminal to run 'streamlit run <path>'
+    try:
+        subprocess.run(["streamlit", "run", dashboard_path])
+    except KeyboardInterrupt:
+        print("\n🛑 Dashboard closed.")

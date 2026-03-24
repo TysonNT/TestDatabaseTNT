@@ -135,7 +135,7 @@ class Material:
 
         return self.properties[prop_name][target_cond].get(T)
 
-   def __getattr__(self, item: str):
+    def __getattr__(self, item: str):
         """
         The magic method that allows `alloy.density`.
         It automatically fetches the property at standard Room Temp (298K) 
